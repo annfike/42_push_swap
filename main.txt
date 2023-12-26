@@ -1,0 +1,73 @@
+/*
+Mac
+chmod 700 checker_Mac
+ARG="2 1 0 5"; ./push_swap $ARG | ./checker_Mac $ARG
+ARG="2 1 0 5 21 14 7 3 58 44"; ./push_swap $ARG | ./checker_Mac $ARG
+ARG="49 69 60 6 93 88 4 63 68 35 95 25 44 0 20 47 87 57 28 13 81 27 34 24 71 90 10 17 16 82 30 51 59 41 32 29 46 61 66 8 86 56 38 33 12 7 77 98 67 75 22 76 79 72 55 89 65 50 23 70 80 5 11 1 36 58 45 18 99 53 21 9 52 3 26 73 39 37 2 64 14 91 40 31 78 19 84 48 74 97 43 94 42 85 92 83 62 54 96 15"; ./push_swap $ARG | ./checker_Mac $ARG
+
+ARG="4 67 3 87 23"; ./push_swap $ARG | wc -l
+ARG=`ruby -e "puts (0..99).to_a.shuffle.join(' ')"`;
+./push_swap $ARG | ./checker_Mac $ARG
+
+ARG=`ruby -e "puts (0..99).to_a.shuffle.join(' ')"` && ./push_swap $ARG | ./checker_Mac $ARG
+
+
+Linux
+chmod 700 checker_linux
+
+https://github.com/gemartin99/Push-Swap-Tester
+./push_swap_test_linux.sh
+./push_swap_test.sh
+And if you want to define the quantity for 100 and 500 tests:
+./push_swap_test.sh -b 100 100
+
+ARG="49 69 60 6 93 88 4 63 68 35 95 25 44 0 20 47 87 57 28 13 81 27 34 24 71 90 10 17 16 82 30 51 59 41 32 29 46 61 66 8 86 56 38 33 12 7 77 98 67 75 22 76 79 72 55 89 65 50 23 70 80 5 11 1 36 58 45 18 99 53 21 9 52 3 26 73 39 37 2 64 14 91 40 31 78 19 84 48 74 97 43 94 42 85 92 83 62 54 96 15"; ./push_swap $ARG | ./checker_linux $ARG
+
+ARG="2 1 0"; ./push_swap $ARG | ./checker_linux $ARG
+
+ARG=`ruby -e "puts (0..99).to_a.shuffle.join(' ')"`;
+./push_swap $ARG | ./checker_Mac $ARG
+
+#500 Numbers between 0 and 1000
+	$> (shuf -i 0-1000 -n 500)
+
+
+
+leaks --atExit -- ./push_swap 1 6 2 4
+valgrind ./push_swap 1 6 2 4
+valgrind --leak-check=full --show-leak-kinds=all ./push_swap 1 6 2 4
+
+
+void	ft_lst_print(t_list *lst)
+{
+	while (lst)
+	{
+		printf("%d\n", lst->num);
+		lst = lst->next;
+	}
+}
+*/
+
+/*
+Main idea for stack size > 5:
+https://rutube.ru/video/a0642f57b19063e83eecbf80b535509e/
+
+1. we push 2 elements to b
+2. sorting1 (from a to b, till size of a == 3):
+--we check if a is sorted (3 4 1 2 == sorted, needs to rotate only)
+--we find min/max in b
+--we check each element in a
+	--we compare it with b_max and b_min to find place in b (on the top of which element we should push it)
+	--we check how many moves we shold do (rotate or reverse rotate both a and b)
+	--we choose min moves, we do it
+	--we push element to b
+3. we sort 3 numbers in a
+4. sorting2 (from b to a, till size of b == 0):
+--we find min/max in a
+--we check each element in b
+	--we compare it with a_max and a_min to find place in a (on the top of which element we should push it)
+	--we check how many moves we shold do (rotate or reverse rotate both a and b)
+	--we choose min moves, we do it
+	--we push element to a
+5. we rotate a to find min number on the top
+*/
